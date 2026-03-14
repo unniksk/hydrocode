@@ -6,6 +6,7 @@ export class DashboardPanel {
   private static readonly viewType = 'hydrocodeDashboard';
   private readonly panel: vscode.WebviewPanel;
   private disposables: vscode.Disposable[] = [];
+  private storage: StorageManager;
 
   static async show(
     context: vscode.ExtensionContext,
@@ -31,13 +32,23 @@ export class DashboardPanel {
       }
     );
 
-    DashboardPanel.currentPanel = new DashboardPanel(panel, context);
+    DashboardPanel.currentPanel = new DashboardPanel(panel, context, storage);
     await DashboardPanel.currentPanel.refresh(storage);
   }
 
-  private constructor(panel: vscode.WebviewPanel, context: vscode.ExtensionContext) {
+  private constructor(panel: vscode.WebviewPanel, context: vscode.ExtensionContext, storage: StorageManager) {
     this.panel = panel;
+    this.storage = storage;
     this.panel.onDidDispose(() => this.dispose(), null, this.disposables);
+    this.panel.webview.onDidReceiveMessage(async (msg) => {
+      if (msg.command === 'resetToday') {
+        vscode.commands.executeCommand('hydrocode.resetToday');
+      } else if (msg.command === 'removeEntry') {
+        await this.storage.removeLogEntry(msg.index);
+        await this.refresh(this.storage);
+        vscode.commands.executeCommand('hydrocode.refreshStatusBar');
+      }
+    }, null, this.disposables);
   }
 
   async refresh(storage: StorageManager): Promise<void> {
@@ -107,13 +118,18 @@ export class DashboardPanel {
       })
       .join('');
 
+    const totalLogs = today.logs.length;
     const recentLogs = today.logs
       .slice(-8)
       .reverse()
-      .map(
-        (log) =>
-          `<div class="log-entry"><span class="log-time">${log.time}</span><span class="log-ml">+${log.ml}ml</span></div>`
-      )
+      .map((log, i) => {
+        const realIndex = totalLogs - 1 - i;
+        return `<div class="log-entry">
+          <span class="log-time">${log.time}</span>
+          <span class="log-ml">+${log.ml}ml</span>
+          <button class="log-delete" onclick="removeEntry(${realIndex})" title="Remove this entry">×</button>
+        </div>`;
+      })
       .join('');
 
     return `<!DOCTYPE html>
@@ -355,6 +371,22 @@ export class DashboardPanel {
     font-family: 'DM Mono', monospace;
   }
 
+  .log-delete {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 0 2px;
+    margin-left: auto;
+    opacity: 0;
+    transition: color 0.15s, opacity 0.15s;
+  }
+
+  .log-entry:hover .log-delete { opacity: 1; }
+  .log-delete:hover { color: #ef4444; }
+
   .empty-log {
     color: var(--text-muted);
     font-size: 13px;
@@ -400,6 +432,24 @@ export class DashboardPanel {
     border-color: rgba(56, 189, 248, 0.3);
     box-shadow: 0 0 20px rgba(56, 189, 248, 0.06);
   }
+
+  .reset-btn {
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .reset-btn:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+  }
 </style>
 </head>
 <body>
@@ -410,6 +460,7 @@ export class DashboardPanel {
     <h1>HydroCode</h1>
     <p>Your hydration companion by Unni Krishnan</p>
   </div>
+  <button class="reset-btn" onclick="resetToday()">↺ Reset Today</button>
 </header>
 
 <div class="stats-row">
@@ -500,6 +551,15 @@ export class DashboardPanel {
   </div>
 </div>
 
+<script>
+  const vscodeApi = acquireVsCodeApi();
+  function resetToday() {
+    vscodeApi.postMessage({ command: 'resetToday' });
+  }
+  function removeEntry(index) {
+    vscodeApi.postMessage({ command: 'removeEntry', index });
+  }
+</script>
 </body>
 </html>`;
   }

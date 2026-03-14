@@ -40,6 +40,10 @@
         "title": "HydroCode: Quick Log (Default Sip)"
       },
       {
+        "command": "hydrocode.barMenu",
+        "title": "HydroCode: Bar Menu"
+      },
+      {
         "command": "hydrocode.logWater",
         "title": "HydroCode: Log Water Intake"
       },

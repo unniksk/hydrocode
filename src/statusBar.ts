@@ -24,7 +24,7 @@ export class StatusBarManager {
       100
     );
     this.progressItem.color = BLUE;
-    this.progressItem.command = 'hydrocode.openDashboard';
+    this.progressItem.command = 'hydrocode.barMenu';
     this.progressItem.show();
 
     this.dndStatusItem = vscode.window.createStatusBarItem(

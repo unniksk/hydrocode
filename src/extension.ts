@@ -188,6 +188,36 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.window.setStatusBarMessage('🔔 HydroCode: Do Not Disturb disabled', 3000);
   });
 
+  // Refresh status bar (called after dashboard edits)
+  const refreshStatusBarCmd = vscode.commands.registerCommand('hydrocode.refreshStatusBar', async () => {
+    const record = await storage.getTodayRecord();
+    statusBar.update(record, reminder.getDNDStatus());
+  });
+
+  // Progress bar click menu
+  const barMenuCmd = vscode.commands.registerCommand('hydrocode.barMenu', async () => {
+    const record = await storage.getTodayRecord();
+    const lastLog = record.logs.at(-1);
+    const items: { label: string; id: string }[] = [
+      { label: '$(graph) Open Dashboard', id: 'dashboard' },
+    ];
+    if (lastLog) {
+      items.push({ label: `$(discard) Undo Last Entry (−${lastLog.ml}ml at ${lastLog.time})`, id: 'undo' });
+    }
+    items.push({ label: '$(trash) Reset Today\'s Intake', id: 'reset' });
+
+    const pick = await vscode.window.showQuickPick(items, { title: 'HydroCode' });
+    if (pick?.id === 'dashboard') {
+      vscode.commands.executeCommand('hydrocode.openDashboard');
+    } else if (pick?.id === 'undo') {
+      const updated = await storage.removeLogEntry(record.logs.length - 1);
+      statusBar.update(updated, reminder.getDNDStatus());
+      vscode.window.setStatusBarMessage(`↩ Removed ${lastLog!.ml}ml entry`, 3000);
+    } else if (pick?.id === 'reset') {
+      vscode.commands.executeCommand('hydrocode.resetToday');
+    }
+  });
+
   // Reset today
   const resetCmd = vscode.commands.registerCommand('hydrocode.resetToday', async () => {
     const confirm = await vscode.window.showWarningMessage(
@@ -205,6 +235,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     quickLogCmd,
+    refreshStatusBarCmd,
+    barMenuCmd,
     logWaterCmd,
     openDashboardCmd,
     setGoalCmd,

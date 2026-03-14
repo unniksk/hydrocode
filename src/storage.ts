@@ -70,6 +70,20 @@ export class StorageManager {
     return record;
   }
 
+  async removeLogEntry(index: number): Promise<DayRecord> {
+    const key = this.dateKey();
+    const all = this.readAll();
+    const record = all[key];
+    if (!record || !record.logs[index]) {
+      return this.getTodayRecord();
+    }
+    const [removed] = record.logs.splice(index, 1);
+    record.totalMl = Math.max(0, record.totalMl - removed.ml);
+    all[key] = record;
+    await this.writeAll(all);
+    return record;
+  }
+
   async resetToday(): Promise<void> {
     const key = this.dateKey();
     const all = this.readAll();
