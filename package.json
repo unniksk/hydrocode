@@ -4,6 +4,7 @@
   "description": "Stay hydrated while you code. Track your daily water intake right inside VS Code.",
   "version": "1.0.0",
   "publisher": "UnniKrishnan",
+  "license": "MIT",
   "author": {
     "name": "Unni Krishnan"
   },
