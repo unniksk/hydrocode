@@ -1,0 +1,140 @@
+{
+  "name": "hydrocode",
+  "displayName": "HydroCode - Water Reminder",
+  "description": "Stay hydrated while you code. Track your daily water intake right inside VS Code.",
+  "version": "1.0.0",
+  "publisher": "UnniKrishnan",
+  "author": {
+    "name": "Unni Krishnan"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "water",
+    "hydration",
+    "reminder",
+    "health",
+    "productivity"
+  ],
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#0ea5e9",
+    "theme": "dark"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unnikrishnan/hydrocode"
+  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "hydrocode.quickLog",
+        "title": "HydroCode: Quick Log (Default Sip)"
+      },
+      {
+        "command": "hydrocode.logWater",
+        "title": "HydroCode: Log Water Intake"
+      },
+      {
+        "command": "hydrocode.openDashboard",
+        "title": "HydroCode: Open Dashboard"
+      },
+      {
+        "command": "hydrocode.setDailyGoal",
+        "title": "HydroCode: Set Daily Goal"
+      },
+      {
+        "command": "hydrocode.enableDND",
+        "title": "HydroCode: Enable Do Not Disturb"
+      },
+      {
+        "command": "hydrocode.disableDND",
+        "title": "HydroCode: Disable Do Not Disturb"
+      },
+      {
+        "command": "hydrocode.resetToday",
+        "title": "HydroCode: Reset Today's Intake"
+      }
+    ],
+    "configuration": {
+      "title": "HydroCode",
+      "properties": {
+        "hydrocode.dailyGoalMl": {
+          "type": "number",
+          "default": 2500,
+          "description": "Daily water intake goal in milliliters",
+          "minimum": 500,
+          "maximum": 6000
+        },
+        "hydrocode.reminderIntervalMinutes": {
+          "type": "number",
+          "default": 30,
+          "description": "How often to show water reminders (in minutes)",
+          "minimum": 5,
+          "maximum": 240
+        },
+        "hydrocode.defaultSipMl": {
+          "type": "number",
+          "default": 250,
+          "description": "Default sip size in ml when clicking the status bar icon",
+          "enum": [100, 150, 200, 250, 300, 350, 400, 500],
+          "enumDescriptions": [
+            "100ml - Small sip",
+            "150ml - Medium sip",
+            "200ml - Small glass",
+            "250ml - Standard glass",
+            "300ml - Large glass",
+            "350ml - Tumbler",
+            "400ml - Large tumbler",
+            "500ml - Bottle"
+          ]
+        },
+        "hydrocode.awayTimeoutMinutes": {
+          "type": "number",
+          "default": 5,
+          "description": "Minutes of inactivity before treating user as away (pauses notifications)",
+          "minimum": 1,
+          "maximum": 30
+        },
+        "hydrocode.notificationFadeSeconds": {
+          "type": "number",
+          "default": 8,
+          "description": "Seconds before notification auto-dismisses (0 = never)",
+          "minimum": 0,
+          "maximum": 60
+        },
+        "hydrocode.enableSounds": {
+          "type": "boolean",
+          "default": false,
+          "description": "Play a subtle water drop sound with reminders"
+        }
+      }
+    },
+    "menus": {
+      "view/title": []
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.22.0",
+    "typescript": "^5.3.0"
+  }
+}

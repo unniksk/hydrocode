@@ -1,0 +1,31 @@
+# Compiled output
+out/
+dist/
+
+# Dependencies
+node_modules/
+
+# VS Code test artifacts
+.vscode-test/
+
+# Packaged extension
+*.vsix
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+*.p12
+*.pfx
+secrets.*
+credentials.*
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
