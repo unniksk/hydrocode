@@ -95,21 +95,24 @@ export class ReminderManager {
     ];
     const msg = messages[Math.floor(Math.random() * messages.length)];
 
+    const drankBtn = `💧 Drank`;
+    const snoozeBtn = `⏱ Snooze`;
+    const dndBtn = `🔕 DND`;
+
     const selection = await vscode.window.showInformationMessage(
       msg,
       { modal: false },
-      `💧 ${defaultSip}ml`,
-      '😴 Snooze 15m',
-      '🔕 DND'
+      drankBtn,
+      snoozeBtn,
+      dndBtn
     );
 
-    if (selection === `💧 ${defaultSip}ml`) {
+    if (selection === drankBtn) {
       const updated = await this.storage.logWater(defaultSip);
       this.statusBar.update(updated, this.isDND);
-      vscode.window.setStatusBarMessage(`✅ +${defaultSip}ml logged!`, 3000);
-    } else if (selection === '😴 Snooze 15m') {
+    } else if (selection === snoozeBtn) {
       this.snooze(15);
-    } else if (selection === '🔕 DND') {
+    } else if (selection === dndBtn) {
       this.enableDND();
       vscode.window.setStatusBarMessage('🔕 HydroCode DND enabled', 3000);
     }

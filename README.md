@@ -1,48 +1,38 @@
-# 💧 HydroCode — Water Reminder for VS Code
+# 💧 HydroCode
 
-> Stay hydrated while you code. Track your daily water intake right inside VS Code.
+> **Code better. Drink water.**
 
 **By Unni Krishnan**
 
 [![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue)](https://marketplace.visualstudio.com/items?itemName=UnniKrishnan.hydrocode)
-[![Version](https://img.shields.io/badge/version-1.0.0-brightgreen)](https://github.com/unnikrishnan/hydrocode)
+[![Version](https://img.shields.io/badge/version-1.1.0-brightgreen)](https://github.com/unnikrishnan/hydrocode)
+
+---
+
+## Status Bar
+
+A single droplet icon and a blue progress bar live in your status bar. Click the 💧 to instantly log your default sip. Click the bar for more options.
+
+![Status Bar](media/screenshot-statusbar.png)
+
+---
+
+## Dashboard
+
+Open the full dashboard with `Cmd+Shift+P` → **HydroCode: Open Dashboard**.
+
+![Dashboard](media/screenshot-dashboard.png)
 
 ---
 
 ## ✨ Features
 
-### 💧 Smart Status Bar
-- A droplet icon in the status bar shows your **live progress** (e.g. `💧 750ml`)
-- Click it to instantly log water from a quick-pick menu
-- Color changes: normal → warning (low) → danger (very low) → goal reached
-- Tooltip shows remaining ml and links to the dashboard
-
-### 🔔 Smart Notifications
-- Periodic reminders with **3 action buttons**: Log water, Snooze 15min, Do Not Disturb
-- **Away detection**: no spam when you step away from VS Code or the window is not focused
-- Notifications are short and auto-dismiss
-
-### 📊 Beautiful Dashboard
-- **Blue heatmap** (GitHub-style) showing 365 days of hydration history
-- **10-droplet progress bar** with partial fill based on exact percentage
-- Stats: streak, weekly total, daily average, goal
-- Today's detailed intake log with timestamps
-
-### ⚙️ Flexible Configuration
-- Set your daily goal (presets: 1500–3500ml or custom)
-- Choose default sip size (100ml–500ml)
-- Adjust reminder interval (5–240 min)
-- Configure away timeout
-- Enable/disable Do Not Disturb mode
-
----
-
-## 🚀 Getting Started
-
-1. Install the extension
-2. HydroCode activates automatically on VS Code startup
-3. Click the 💧 icon in your status bar to log your first glass
-4. Open the dashboard: `Ctrl+Shift+P` → **HydroCode: Open Dashboard**
+- **One-click logging** — click the 💧 to log your default sip instantly
+- **Blue progress bar** — 10-segment bar fills as you hydrate
+- **Smart reminders** — periodic notifications with Log / Snooze / DND options
+- **Away detection** — no spam when you step away from VS Code
+- **365-day heatmap** — GitHub-style history of your hydration
+- **Today's log** — timestamped list of every entry with undo support
 
 ---
 
@@ -50,49 +40,38 @@
 
 | Command | Description |
 |---|---|
-| `HydroCode: Log Water Intake` | Log water (click status bar or command palette) |
-| `HydroCode: Open Dashboard` | Open the 365-day history dashboard |
-| `HydroCode: Set Daily Goal` | Change your daily water goal |
+| `HydroCode: Log Water Intake` | Log water with a size picker |
+| `HydroCode: Set Default Sip Size` | Change what the 💧 click logs |
+| `HydroCode: Set Daily Goal` | Change your daily target |
+| `HydroCode: Open Dashboard` | Open the 365-day dashboard |
 | `HydroCode: Enable Do Not Disturb` | Pause all reminders |
-| `HydroCode: Disable Do Not Disturb` | Resume reminders |
 | `HydroCode: Reset Today's Intake` | Clear today's data |
 
 ---
 
-## ⚙️ Settings
+## ⚙️ How to change default sip size and daily goal
+
+**Via Command Palette** (`Cmd+Shift+P`):
+- `HydroCode: Set Default Sip Size` — choose from 100ml to 500ml
+- `HydroCode: Set Daily Goal` — set your target (500–6000ml)
+
+**Via VS Code Settings** (`Cmd+,` → search "hydrocode"):
 
 | Setting | Default | Description |
 |---|---|---|
-| `hydrocode.dailyGoalMl` | `2500` | Daily water goal in ml |
-| `hydrocode.reminderIntervalMinutes` | `30` | How often to remind you |
-| `hydrocode.defaultSipMl` | `250` | Default ml logged via status bar click |
-| `hydrocode.awayTimeoutMinutes` | `5` | Inactivity time before pausing notifications |
-| `hydrocode.notificationFadeSeconds` | `8` | Auto-dismiss time for notifications |
+| `hydrocode.defaultSipMl` | `250` | ml logged on each 💧 click |
+| `hydrocode.dailyGoalMl` | `2500` | Daily water target in ml |
+| `hydrocode.reminderIntervalMinutes` | `30` | How often reminders appear |
+| `hydrocode.awayTimeoutMinutes` | `5` | Inactivity before pausing notifications |
 
 ---
 
-## 📦 Publishing
+## 🚀 Getting Started
 
-```bash
-# Install vsce
-npm install -g @vscode/vsce
-
-# Package
-vsce package
-
-# Publish (requires Personal Access Token from marketplace.visualstudio.com)
-vsce publish
-```
-
-See [Publishing Extensions](https://code.visualstudio.com/api/working-with-extensions/publishing-extension) for full instructions.
+1. Install from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=UnniKrishnan.hydrocode)
+2. HydroCode activates automatically on startup
+3. Click the 💧 in your status bar to log your first glass
 
 ---
 
-## 🙏 Credits
-
-Built with ❤️ by **Unni Krishnan**  
-Inspired by the belief that good code starts with a hydrated developer.
-
----
-
-*"Code better. Drink water."*
+*Built with ❤️ by Unni Krishnan*

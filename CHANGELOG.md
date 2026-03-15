@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.1.0] — 2026-03-16
+
+### Added
+- `HydroCode: Set Default Sip Size` command — change the 💧 click amount from the command palette
+- Unit tests for notification message logic (`npm run test:unit`)
+- All 7 day labels (Mon–Sun) shown on the 365-day heatmap
+
+### Changed
+- Status bar items moved to the left side
+- Progress bar height increased (6px → 12px)
+- Notification buttons updated to `💧 Drank`, `⏱ Snooze`, `🔕 DND`
+- Clicking 💧 no longer shows a toast — message only appears when daily goal is reached
+- Reset Today now instantly refreshes the dashboard
+
+### Fixed
+- Dashboard Reset Today button now correctly refreshes the view
+- Removed unimplemented `notificationFadeSeconds` setting
+
+---
+
 ## [1.0.0] — 2026-03-14
 
 ### Initial Release

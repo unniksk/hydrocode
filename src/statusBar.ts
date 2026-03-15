@@ -11,8 +11,8 @@ export class StatusBarManager {
   constructor() {
     // Clickable droplet icon
     this.iconItem = vscode.window.createStatusBarItem(
-      vscode.StatusBarAlignment.Right,
-      101
+      vscode.StatusBarAlignment.Left,
+      0
     );
     this.iconItem.text = '💧';
     this.iconItem.command = 'hydrocode.quickLog';
@@ -20,16 +20,16 @@ export class StatusBarManager {
 
     // Blue progress bar — opens dashboard on click
     this.progressItem = vscode.window.createStatusBarItem(
-      vscode.StatusBarAlignment.Right,
-      100
+      vscode.StatusBarAlignment.Left,
+      0
     );
     this.progressItem.color = BLUE;
     this.progressItem.command = 'hydrocode.barMenu';
     this.progressItem.show();
 
     this.dndStatusItem = vscode.window.createStatusBarItem(
-      vscode.StatusBarAlignment.Right,
-      99
+      vscode.StatusBarAlignment.Left,
+      0
     );
     this.dndStatusItem.command = 'hydrocode.disableDND';
     this.dndStatusItem.text = '$(bell-slash) DND';

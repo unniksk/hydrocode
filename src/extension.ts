@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { buildGoalReachedMessage, buildReminderMessage, isGoalReached } from './notificationMessages';
 import { StorageManager } from './storage';
 import { StatusBarManager } from './statusBar';
 import { ReminderManager } from './reminder';
@@ -52,10 +53,8 @@ export async function activate(context: vscode.ExtensionContext) {
     const percent = Math.min(100, Math.round((updated.totalMl / updated.goalMl) * 100));
     if (percent >= 100) {
       vscode.window.showInformationMessage(
-        `🎉 Daily goal reached! You've had ${updated.totalMl}ml today. Amazing work!`
+        buildGoalReachedMessage(updated.totalMl)
       );
-    } else {
-      vscode.window.setStatusBarMessage(`✅ +${ml}ml logged! ${updated.totalMl}ml today (${percent}%)`, 4000);
     }
   });
 
@@ -112,7 +111,7 @@ export async function activate(context: vscode.ExtensionContext) {
     const percent = Math.min(100, Math.round((updated.totalMl / updated.goalMl) * 100));
     if (percent >= 100) {
       vscode.window.showInformationMessage(
-        `🎉 Daily goal reached! You've had ${updated.totalMl}ml today. Amazing work!`
+        buildGoalReachedMessage(updated.totalMl)
       );
     } else {
       vscode.window.setStatusBarMessage(`✅ +${ml}ml logged! ${updated.totalMl}ml today (${percent}%)`, 4000);
@@ -218,6 +217,24 @@ export async function activate(context: vscode.ExtensionContext) {
     }
   });
 
+  // Set default sip size
+  const setDefaultSipCmd = vscode.commands.registerCommand('hydrocode.setDefaultSip', async () => {
+    const config = vscode.workspace.getConfiguration('hydrocode');
+    const current = config.get<number>('defaultSipMl', 250);
+    const options = [100, 150, 200, 250, 300, 350, 400, 500].map(ml => ({
+      label: `💧 ${ml}ml`,
+      description: ml === current ? '✓ current' : '',
+      ml,
+    }));
+    const pick = await vscode.window.showQuickPick(options, {
+      placeHolder: 'Select your default sip size',
+      title: 'HydroCode – Set Default Sip Size',
+    });
+    if (!pick) return;
+    await config.update('defaultSipMl', pick.ml, vscode.ConfigurationTarget.Global);
+    vscode.window.showInformationMessage(`Default sip set to ${pick.ml}ml`);
+  });
+
   // Reset today
   const resetCmd = vscode.commands.registerCommand('hydrocode.resetToday', async () => {
     const confirm = await vscode.window.showWarningMessage(
@@ -242,6 +259,7 @@ export async function activate(context: vscode.ExtensionContext) {
     setGoalCmd,
     enableDNDCmd,
     disableDNDCmd,
+    setDefaultSipCmd,
     resetCmd,
     { dispose: () => statusBar.dispose() },
     { dispose: () => reminder.stopReminders() }

@@ -42,7 +42,16 @@ export class DashboardPanel {
     this.panel.onDidDispose(() => this.dispose(), null, this.disposables);
     this.panel.webview.onDidReceiveMessage(async (msg) => {
       if (msg.command === 'resetToday') {
-        vscode.commands.executeCommand('hydrocode.resetToday');
+        const confirm = await vscode.window.showWarningMessage(
+          "Reset today's water intake to 0?",
+          { modal: true },
+          'Yes, Reset'
+        );
+        if (confirm === 'Yes, Reset') {
+          await this.storage.resetToday();
+          await this.refresh(this.storage);
+          vscode.commands.executeCommand('hydrocode.refreshStatusBar');
+        }
       } else if (msg.command === 'removeEntry') {
         await this.storage.removeLogEntry(msg.index);
         await this.refresh(this.storage);
@@ -268,16 +277,16 @@ export class DashboardPanel {
 
   /* Bar */
   .progress-bar {
-    height: 6px;
+    height: 12px;
     background: var(--border);
-    border-radius: 3px;
+    border-radius: 6px;
     overflow: hidden;
   }
 
   .progress-fill {
     height: 100%;
     background: linear-gradient(90deg, #0369a1, #38bdf8);
-    border-radius: 3px;
+    border-radius: 6px;
     transition: width 0.6s ease;
     width: ${percent}%;
   }
@@ -521,13 +530,13 @@ export class DashboardPanel {
     <div class="heatmap-wrapper">
       <div class="heatmap-body">
         <div class="heatmap-days">
-          <span></span>
           <span>Mon</span>
-          <span></span>
+          <span>Tue</span>
           <span>Wed</span>
-          <span></span>
+          <span>Thu</span>
           <span>Fri</span>
-          <span></span>
+          <span>Sat</span>
+          <span>Sun</span>
         </div>
         <div>
           <div class="heatmap-grid">
